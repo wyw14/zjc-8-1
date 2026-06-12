@@ -16,6 +16,18 @@ createApp({
     const randomDream = ref(null);
     const monthlyStats = ref({ count: 0, avgLucidity: 0 });
 
+    const now = new Date();
+    const selectedYear = ref(now.getFullYear());
+    const selectedMonth = ref(now.getMonth() + 1);
+    const yearOptions = computed(() => {
+      const current = new Date().getFullYear();
+      const years = [];
+      for (let y = current - 5; y <= current; y++) {
+        years.push(y);
+      }
+      return years;
+    });
+
     const newDream = ref({
       content: '',
       lucidity: 3,
@@ -128,6 +140,12 @@ createApp({
       try {
         const data = await apiRequest('/dreams/random');
         randomDream.value = data;
+        if (!isPlaying.value) {
+          startWhiteNoise();
+          setTimeout(() => {
+            stopWhiteNoise();
+          }, 12000);
+        }
       } catch (e) {
         alert(e.message);
       }
@@ -135,12 +153,15 @@ createApp({
 
     async function fetchMonthlyStats() {
       try {
-        const now = new Date();
-        const data = await apiRequest(`/stats/monthly?year=${now.getFullYear()}&month=${now.getMonth() + 1}`);
+        const data = await apiRequest(`/stats/monthly?year=${selectedYear.value}&month=${selectedMonth.value}`);
         monthlyStats.value = data;
       } catch (e) {
         console.error('获取月度统计失败', e);
       }
+    }
+
+    function onMonthChange() {
+      fetchMonthlyStats();
     }
 
     async function addDream() {
@@ -216,12 +237,15 @@ createApp({
       } else if (audioContext.state === 'suspended') {
         audioContext.resume();
       }
+      if (gainNode) {
+        gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+      }
       isPlaying.value = true;
     }
 
     function stopWhiteNoise() {
-      if (gainNode) {
-        gainNode.gain.value = 0;
+      if (gainNode && audioContext) {
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
       }
       isPlaying.value = false;
     }
@@ -248,7 +272,11 @@ createApp({
       fetchRandomDream,
       addDream,
       isPlaying,
-      toggleWhiteNoise
+      toggleWhiteNoise,
+      selectedYear,
+      selectedMonth,
+      yearOptions,
+      onMonthChange
     };
   }
 }).mount('#app');

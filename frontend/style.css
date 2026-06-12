@@ -198,6 +198,50 @@ body {
   padding: 30px 20px;
 }
 
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 20px;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.stats-selector {
+  display: flex;
+  gap: 10px;
+}
+
+.stats-selector select {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.stats-selector select:hover {
+  border-color: rgba(167, 139, 250, 0.5);
+}
+
+.stats-selector select:focus {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+}
+
+.stats-selector select option {
+  background: #1a1a2e;
+  color: #e2e8f0;
+}
+
 .stats-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

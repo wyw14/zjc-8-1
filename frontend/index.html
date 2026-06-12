@@ -43,10 +43,21 @@
       </header>
 
       <main class="content">
+        <div class="stats-header">
+          <h2 class="section-title">📊 月度统计</h2>
+          <div class="stats-selector">
+            <select v-model="selectedYear" @change="onMonthChange">
+              <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}年</option>
+            </select>
+            <select v-model="selectedMonth" @change="onMonthChange">
+              <option v-for="m in 12" :key="m" :value="m">{{ m }}月</option>
+            </select>
+          </div>
+        </div>
         <div class="stats-section">
           <div class="stat-card">
             <div class="stat-number">{{ monthlyStats.count }}</div>
-            <div class="stat-label">本月梦境</div>
+            <div class="stat-label">{{ selectedMonth }}月梦境数</div>
           </div>
           <div class="stat-card">
             <div class="stat-number">{{ monthlyStats.avgLucidity }}</div>
